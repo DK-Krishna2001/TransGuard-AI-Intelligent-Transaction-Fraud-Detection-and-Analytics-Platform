@@ -50,3 +50,9 @@ Server: db
 Username: postgres
 Password: postgres
 Database: transguard
+
+
+## 3. Git Repo
+
+Link: https://github.com/DK-Krishna2001/transguard_ai/
+
