@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: transguard
+    database: transguard
+    schema: public
+    tables:
+      - name: users
+      - name: cards
+      - name: transactions

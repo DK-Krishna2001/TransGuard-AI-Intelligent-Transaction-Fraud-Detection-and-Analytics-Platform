@@ -1,0 +1,73 @@
+version: 2
+
+models:
+  - name: dim_users
+    description: "User dimension table"
+    columns:
+      - name: user_id
+        description: "Unique user identifier"
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_cards
+    description: "Card dimension table"
+    columns:
+      - name: card_id
+        description: "Unique card identifier"
+        tests:
+          - not_null
+          - unique
+      - name: user_id
+        description: "Owning user for the card"
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_users')
+                field: user_id
+
+  - name: dim_date
+    description: "Date dimension table derived from transactions"
+    columns:
+      - name: date_key
+        description: "Date surrogate key"
+        tests:
+          - not_null
+          - unique
+
+  - name: fact_transactions
+    description: "Fact table for credit card transactions"
+    columns:
+      - name: transaction_id
+        description: "Unique transaction identifier"
+        tests:
+          - not_null
+          - unique
+      - name: user_id
+        description: "User performing the transaction"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_users')
+                field: user_id
+      - name: card_id
+        description: "Card used in the transaction"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_cards')
+                field: card_id
+      - name: date_key
+        description: "Transaction calendar date key"
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: amount
+        description: "Transaction amount"
+        tests:
+          - not_null
