@@ -151,7 +151,7 @@ def load_transactions(engine, path: str):
 # -------- Main --------
 def main():
     engine = get_engine()
-    base = os.getenv("DATA_DIR", "./data")
+    base = os.getenv("DATA_DIR", "../data")
 
     load_users(engine, os.path.join(base, "users_data.csv"))
     load_cards(engine, os.path.join(base, "cards_data.csv"))
