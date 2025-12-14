@@ -23,5 +23,21 @@ services:
     depends_on:
       - db
 
+  dashboard:
+    build:
+      context: ./Phase3
+      dockerfile: Dockerfile
+    container_name: transguard-dashboard
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: transguard
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    ports:
+      - "8501:8501"
+    depends_on:
+      - db
+
 volumes:
   db_data:

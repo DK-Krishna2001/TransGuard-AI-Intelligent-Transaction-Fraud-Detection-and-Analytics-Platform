@@ -5,6 +5,7 @@ SELECT
     t.date::date AS date_key,
     t.amount,
     t.use_chip,
+    t.errors,
     t.merchant_id,
     t.mcc,
     t.merchant_city,

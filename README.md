@@ -1,63 +1,45 @@
-# TransGuard AI – Phase 1 (Database Foundation - OLTP)
+# TransGuard AI – OLTP, Warehouse, and Dashboard
 
-This repository implements Phase 1 of the EAS 550 group project:
-a normalized PostgreSQL database and ingestion pipeline for a
-synthetic credit card transaction and fraud dataset.
+End-to-end project for synthetic credit card transactions and fraud risk:
+1) Phase 1 OLTP schema + ingestion, 2) Phase 2 dbt warehouse, 3) Phase 3 Streamlit dashboard.
 
-## 1. Tech Stack
+## Stack
+- PostgreSQL 16 (OLTP + warehouse schemas)
+- dbt (Phase2 models in `Phase2/transguard_dw`)
+- Streamlit (Phase3 dashboard)
+- Docker + docker-compose, Adminer
 
-- PostgreSQL 16 (OLTP database)
-- Docker + docker-compose
-- Python 3, Pandas, SQLAlchemy, psycopg2-binary
-- Adminer (web UI for Postgres)
-
-## 2. Folder Structure
-
+## Repo Layout
 ```text
-transguard-ai/
-  docker-compose.yml
-  README.md
-
-  phase1/
-    schema.sql
-    ingest_data.py
-    security.sql
-    erd.md
-    3nf_justification.md
-
-  data/
-    users_data.csv
-    cards_data.csv
-    transactions_data.csv
+docker-compose.yaml
+README.md
+Phase1/        # OLTP DDL + ingestion
+Phase2/        # dbt project + advanced SQL
+Phase3/        # Streamlit dashboard (Phase 3)
+data/          # CSVs for ingestion
 ```
 
-## 3. How to Run the Database
+## Run Everything (Postgres, Adminer, Dashboard)
+```bash
+docker compose up --build -d
+```
+Services:
+- Postgres: localhost:5432 (db name `transguard`, user/password `postgres`)
+- Adminer: http://localhost:8080 (System: PostgreSQL, Server: db, User: postgres, Password: postgres, Database: transguard)
+- Dashboard: http://localhost:8501 (Streamlit, reads `analytics_warehouse.fact_transactions`)
 
-Start PostgreSQL + Adminer
-  docker-compose up -d
+## Phase Details
+- Phase1: `Phase1/schema.sql`, `Phase1/security.sql`, `Phase1/ingest_data.py` load CSVs in `data/` into the OLTP schema.
+- Phase2: `Phase2/transguard_dw` dbt project builds staging and warehouse models (`analytics_staging` / `analytics_warehouse`). Advanced queries + indexing tips in `Phase2/3_advance_queries+optimization.sql`.
+- Phase3: `Phase3/app.py` Streamlit dashboard with KPI cards, daily trends, merchant risk leaderboard, and state summary. Configurable via env vars: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`.
 
-Stop Services
-  docker-compose down
+## Stop Services
+```bash
+docker compose down
+```
 
-Once Running
-
-Postgres: localhost:5432
-
-Adminer UI: http://localhost:8080
-
-System: PostgreSQL
-Server: db
-Username: postgres
-Password: postgres
-Database: transguard
-
-
-## 3. Git Repo
-
-Link: https://github.com/DK-Krishna2001/transguard_ai/
-
-## 4. YouTube Link
-
-Link: https://youtu.be/MUG1i-Lt3hI
+## Links
+- Repo: https://github.com/DK-Krishna2001/transguard_ai/
+- Phase 1 demo: https://youtu.be/MUG1i-Lt3hI
 
 
